@@ -1,11 +1,19 @@
-var path = require("path");
+const path = require("path");
+
+const friends = require("../data/friends");
 
 module.exports = function(app) {
   app.get("/api/friends", function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/survey.html"));
+      res.json(friends)
   });
+  app.post("/api/friends", function(req, res) {
+      var newFriend = req.body;
+      var usersScore = 0;
+      friends.push(newFriend);
 
-  app.get("*", function(req, res) {
-    res.sendFile(path.join(__dirname, "../public/home.html"));
+      for (var i = 0; i < newFriend.score.length; i++) {
+        usersScore += parseInt(newFriend.score);
+      }
+      console.log(usersScore);
   });
 };
