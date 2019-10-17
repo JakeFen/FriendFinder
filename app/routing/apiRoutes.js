@@ -4,16 +4,20 @@ const friends = require("../data/friends");
 
 module.exports = function(app) {
   app.get("/api/friends", function(req, res) {
-      res.json(friends)
+    res.json(friends);
   });
   app.post("/api/friends", function(req, res) {
-      var newFriend = req.body;
-      var usersScore = 0;
-      friends.push(newFriend);
-
-      for (var i = 0; i < newFriend.score.length; i++) {
-        usersScore += parseInt(newFriend.score);
+    var newFriend = req.body;
+    var count;
+    for (var i = 0; i < friends.length; i++) {
+      count = 0;
+      for (var j = 0; j < friends[count].scores.length; j++) {
+        var friendScore = friends[count].scores[j];
+        console.log(Math.abs(friendScore - parseInt(newFriend.scores)))
       }
-      console.log(usersScore);
+      count++;
+    }
+    friends.push(newFriend);
+
   });
 };
