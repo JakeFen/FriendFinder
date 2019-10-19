@@ -8,16 +8,22 @@ module.exports = function(app) {
   });
   app.post("/api/friends", function(req, res) {
     var newFriend = req.body;
-    var count;
+    var bestFriend;
+    var minDiff = 40;
     for (var i = 0; i < friends.length; i++) {
-      count = 0;
-      for (var j = 0; j < friends[count].scores.length; j++) {
-        var friendScore = friends[count].scores[j];
-        console.log(Math.abs(friendScore - parseInt(newFriend.scores)))
+      var friendDiff = 0;
+      for (var j = 0; j < friends[i].scores.length; j++) {
+        var friendScore = friends[i].scores[j];
+        friendDiff += Math.abs(friendScore - parseInt(newFriend.scores));
       }
-      count++;
+      // if current friend being looped has a lower diff than minDiff change minDiff and the bestFriend
+      if (friendDiff < minDiff) {
+        minDiff = friendDiff;
+        bestFriend = friends[i];
+      }
     }
-    friends.push(newFriend);
 
+    res.json(bestFriend);
+    friends.push(newFriend);
   });
 };
